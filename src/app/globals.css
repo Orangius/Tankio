@@ -25,7 +25,7 @@
     --accent: hsl(25, 100%, 50%);
     --accent-foreground: #ffffff;
 
-    --destructive: #;
+    --destructive: #c80815;
     --destructive-foreground: #;
 
     --border: #00c0fa;
@@ -107,3 +107,28 @@
   background-color: #0d111f;
   color: #96c8fa;
 } */
+
+/* input:-webkit-autofill {
+  color: #1c39da !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 100px var(--background) inset !important;
+}
+input:-webkit-autofill {
+  -webkit-text-fill-color: yellow !important;
+} */
+
+/* This section makes sure that ato complete does not change input background color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--secondary-foreground);
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}

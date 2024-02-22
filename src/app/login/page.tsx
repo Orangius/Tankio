@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
+import { BiSolidHide, BiSolidShow } from "react-icons/bi"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -25,7 +26,7 @@ const formSchema = z.object({
   rememberMe: z.boolean().default(false).optional(),
 })
 
-import React from "react"
+import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
@@ -38,8 +39,12 @@ const Login = () => {
       rememberMe: false,
     },
   })
+  const [showPassword, setShowPassword] = useState(false)
 
   function onSubmit() {}
+  function handleShowPassword() {
+    setShowPassword(!showPassword)
+  }
   return (
     <div>
       <div className="flex flex-col items-center">
@@ -83,15 +88,29 @@ const Login = () => {
                 return (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your password"
-                        type="password"
-                        {...field}
-                        className="rounded-3xl"
-                      />
-                    </FormControl>
-                    <FormMessage />
+                    <div className="relative">
+                      <FormControl>
+                        <Input
+                          placeholder="Enter password"
+                          type={showPassword ? "text" : "password"}
+                          {...field}
+                          className="rounded-3xl"
+                        />
+                      </FormControl>
+                      {!showPassword ? (
+                        <BiSolidShow
+                          onClick={handleShowPassword}
+                          className="absolute text-xl top-[10px] right-3 cursor-pointer"
+                        />
+                      ) : (
+                        <BiSolidHide
+                          onClick={handleShowPassword}
+                          className="absolute text-xl top-[10px] right-3
+                          cursor-pointer"
+                        />
+                      )}
+                    </div>
+                    <FormMessage className="text-destructive" />
                   </FormItem>
                 )
               }}
@@ -115,7 +134,7 @@ const Login = () => {
               }}
             />
             <Button className="rounded-full bg-accent text-lg text-accent-foreground">
-              Submit
+              Login
             </Button>
           </form>
         </Form>
