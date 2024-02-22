@@ -31,7 +31,7 @@ export default function Hero() {
             priority
           ></Image>
         </div>
-        <button className="md:hidden mt-4 bg-accent w-1/2 md:w-[221px] h-[72px] rounded-[24px] text-accent-foreground">
+        <button className="md:hidden mt-4 bg-accent w-1/2 md:w-[221px] h-12 rounded-[24px] text-accent-foreground">
           {" "}
           Get Started
         </button>

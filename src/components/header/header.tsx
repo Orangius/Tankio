@@ -14,8 +14,8 @@ function Header() {
     setOpenMenu(!openMenu)
   }
   return (
-    <header className="flex  items-center justify-between mt-4 mx-4 md:mx-8 my-4 h-12">
-      <Link href="/" className="cursor-pointer">
+    <header className="flex  items-center justify-between mt-4 mx-4 md:mx-8 my-4 h-12 text-lg relative z-[9999]">
+      <Link href="/" className="cursor-pointer z-10 md:z-0">
         <div className="flex justify-center items-center">
           <Image
             src={"/Logo.png"}
@@ -26,30 +26,33 @@ function Header() {
             priority
           ></Image>
 
-          <h2>Tankio</h2>
+          <h2 className="font-bold text-2xl">Tankio</h2>
         </div>
       </Link>
       <nav
-        className={clsx("w-full absolute top-12 left-0 md:static", {
-          "hidden md:block": openMenu === false,
-        })}
+        className={clsx(
+          "w-full bg-background/30 md:bg-transparent backdrop-blur-lg md:backdrop-blur-none absolute top-12 left-0 md:static",
+          {
+            "hidden md:block": openMenu === false,
+          }
+        )}
       >
-        <ul className="w-full flex flex-col gap-2 items-center justify-end md:flex-row md:gap-16">
+        <ul className="w-full flex flex-col gap-2 items-center justify-end md:flex-row md:gap-16 font-medium text-">
           <li>
-            <Link className="cursor-pointer" href="#">
+            <Link className="cursor-pointer" href="/demo">
               {" "}
-              Features{" "}
+              Demo{" "}
             </Link>
           </li>
           <Separator className="w-3/12 md:hidden" />
           <li>
-            <Link className="cursor-pointer" href="#">
+            <Link className="cursor-pointer" href="/blog">
               Blog
             </Link>
           </li>
           <Separator className="w-3/12 md:hidden" />
           <li>
-            <Link className="cursor-pointer" href="#">
+            <Link className="cursor-pointer" href="/login">
               <button className="h-[36px] w-[89px] md:bg-primary md:text-primary-foreground md:rounded-[40px]">
                 Login
               </button>
@@ -57,7 +60,7 @@ function Header() {
           </li>
           <Separator className="w-3/12 md:hidden" />
           <li>
-            <Link className="cursor-pointer" href="#">
+            <Link className="cursor-pointer" href="/signup">
               SIgn up
             </Link>
           </li>
@@ -65,7 +68,7 @@ function Header() {
       </nav>
 
       {!openMenu ? (
-        <IoMenu className="md:hidden" onClick={openMobileMenu} />
+        <IoMenu className="md:hidden " onClick={openMobileMenu} />
       ) : (
         <IoMdClose className="md:hidden" onClick={openMobileMenu} />
       )}

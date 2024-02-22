@@ -1,0 +1,21 @@
+.main {
+  position: relative;
+}
+
+.level {
+  -webkit-mask-image: url("/Tank-Animated/Matte.png");
+  mask-image: url("/Tank-Animated/Matte.png");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  -webkit-mask-size: cover;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.movement {
+  position: absolute;
+  top: 0%;
+  left: 0px;
+}
