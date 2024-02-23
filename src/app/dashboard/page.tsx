@@ -3,9 +3,17 @@
 import React, { useState } from "react"
 import TankImage from "@/components/TankImage/TankImage"
 import clsx from "clsx"
+import { useSession } from "next-auth/react"
+import { redirect } from "next/navigation"
+
 export default function page() {
   const [pumpOnImage, setPumpOnImage] = useState(false)
-
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/login")
+    },
+  })
   function swap() {
     setPumpOnImage(!pumpOnImage)
   }

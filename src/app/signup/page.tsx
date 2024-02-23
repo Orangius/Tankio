@@ -15,21 +15,32 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be more than 2 characters",
-  }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters",
-  }),
-  confirmPassword: z.string().min(6, {
-    message: "Password must be at least 6 characters",
-  }),
-})
+const formSchema = z
+  .object({
+    username: z.string().min(2, {
+      message: "Username must be more than 2 characters",
+    }),
+    password: z.string().min(6, {
+      message: "Password must be at least 6 characters",
+    }),
+    confirmPassword: z.string().min(6, {
+      message: "Password must be at least 6 characters",
+    }),
+  })
+  .refine(
+    (data) => {
+      return data.password === data.confirmPassword
+    },
+    {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    }
+  )
 
 import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 const Login = () => {
   const loginForm = useForm<z.infer<typeof formSchema>>({
@@ -42,8 +53,24 @@ const Login = () => {
   })
 
   const [showPassword, setShowPassword] = useState(false)
+  const [formSubmitState, setFormSubmitState] = useState("")
+  const router = useRouter()
+  async function submitLogin(values: z.infer<typeof formSchema>) {
+    const res = await fetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+    if (res.status === 409) setFormSubmitState("Username taken")
+    else if (res.status === 400) setFormSubmitState("Fields incomplete")
+    else setFormSubmitState("Registration sucessful")
 
-  function onSubmit() {}
+    router.push("/dashboard")
+    // mutate data
+    // revalidate cache
+  }
   function handleShowPassword() {
     setShowPassword(!showPassword)
   }
@@ -56,12 +83,15 @@ const Login = () => {
             Sign up and start managing your Tanks
             <br /> from <span className="text-accent">anywhere!</span>
           </h3>
+          {formSubmitState ? (
+            <h4 className="text-center">{formSubmitState}</h4>
+          ) : null}
         </div>
 
         <Form {...loginForm}>
           <form
             autoComplete="off"
-            onSubmit={loginForm.handleSubmit(onSubmit)}
+            onSubmit={loginForm.handleSubmit(submitLogin)}
             className="w-4/5 md:w-2/5 flex flex-col gap-4 border border-primary rounded-3xl p-4 pb-10 pt-10 "
           >
             <FormField
@@ -143,16 +173,16 @@ const Login = () => {
             />
 
             <Button className="rounded-full bg-accent text-lg text-accent-foreground">
-              Login
+              Sign up
             </Button>
           </form>
         </Form>
 
         <h3 className="mt-8">
-          Don't have an account?{" "}
-          <Link href={"/signup"}>
+          Already have an account?{" "}
+          <Link href={"/login"}>
             {" "}
-            <span className="underline">Sign Up</span>{" "}
+            <span className="underline">Sign in</span>{" "}
           </Link>
         </h3>
       </div>

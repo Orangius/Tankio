@@ -2,7 +2,7 @@
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-
+import { signIn } from "next-auth/react"
 import {
   Form,
   FormControl,
@@ -29,6 +29,7 @@ const formSchema = z.object({
 import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 const Login = () => {
   const loginForm = useForm<z.infer<typeof formSchema>>({
@@ -40,8 +41,22 @@ const Login = () => {
     },
   })
   const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter()
+  async function submitLogin(values: z.infer<typeof formSchema>) {
+    console.log(values)
+    const res = await signIn("credentials", {
+      redirect: false,
+      username: values.username,
+      password: values.password,
+    })
+    console.log(res)
+    if (res?.url == null) {
+      console.log("Invalid username or password")
+    } else {
+      router.replace("/dashboard")
+    }
+  }
 
-  function onSubmit() {}
   function handleShowPassword() {
     setShowPassword(!showPassword)
   }
@@ -58,7 +73,7 @@ const Login = () => {
 
         <Form {...loginForm}>
           <form
-            onSubmit={loginForm.handleSubmit(onSubmit)}
+            onSubmit={loginForm.handleSubmit(submitLogin)}
             className="w-4/5 md:w-2/5 flex flex-col gap-4 border border-primary rounded-3xl p-4 pb-10 pt-10"
           >
             <FormField
@@ -121,14 +136,16 @@ const Login = () => {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className="rounded-[3px] mr-2"
-                      />
-                    </FormControl>
-                    <FormLabel>Remember me</FormLabel>
+                    <div className="flex gap-2 items-center ">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className="rounded-[3px]"
+                        />
+                      </FormControl>
+                      <FormLabel>Remember me</FormLabel>
+                    </div>
                   </FormItem>
                 )
               }}

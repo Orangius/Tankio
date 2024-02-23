@@ -6,10 +6,15 @@ import { IoMdClose } from "react-icons/io"
 import { Separator } from "@/components/ui/separator"
 import { clsx } from "clsx"
 import Link from "next/link"
+import { useSession } from "next-auth/react"
+import { options } from "@/app/api/auth/[...nextauth]/options"
 
 function Header() {
   const [openMenu, setOpenMenu] = useState(false)
-
+  const { data: session, status } = useSession()
+  if (session) {
+    console.log("Session from Nav: ", session)
+  }
   function openMobileMenu() {
     setOpenMenu(!openMenu)
   }
@@ -52,18 +57,31 @@ function Header() {
           </li>
           <Separator className="w-3/12 md:hidden" />
           <li>
-            <Link className="cursor-pointer" href="/login">
-              <button className="h-[36px] w-[89px] md:bg-primary md:text-primary-foreground md:rounded-[40px]">
-                Login
-              </button>
-            </Link>
+            {status === "authenticated" ? (
+              <Link
+                className="cursor-pointer"
+                href="/api/auth/signout?callbackUrl=/"
+              >
+                <button className="h-[36px] w-[89px] md:bg-primary md:text-primary-foreground md:rounded-[40px]">
+                  Log out
+                </button>
+              </Link>
+            ) : (
+              <Link className="cursor-pointer" href="/login">
+                <button className="h-[36px] w-[89px] md:bg-primary md:text-primary-foreground md:rounded-[40px]">
+                  Login
+                </button>
+              </Link>
+            )}
           </li>
           <Separator className="w-3/12 md:hidden" />
-          <li>
-            <Link className="cursor-pointer" href="/signup">
-              SIgn up
-            </Link>
-          </li>
+          {status !== "authenticated" ? (
+            <li>
+              <Link className="cursor-pointer" href="/signup">
+                SIgn up
+              </Link>
+            </li>
+          ) : null}
         </ul>
       </nav>
 

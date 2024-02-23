@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Inter, Nunito } from "next/font/google"
 import "./globals.css"
 import Header from "@components/header/header"
+import AuthProvider from "@/components/AuthProvider/authProvider"
 
 const nunito = Nunito({ subsets: ["latin"] })
 
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${nunito.className}`}>
-        <Header />
-        {children}
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
