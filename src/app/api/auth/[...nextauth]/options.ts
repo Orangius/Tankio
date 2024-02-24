@@ -35,15 +35,16 @@ export const options: NextAuthOptions = {
             .lean()
             .exec()
 
-          console.log("found user: ", foundUser)
+          // console.log("found user: ", foundUser)
           if (foundUser) {
             const isPasswordCorrect = await bcryptjs.compare(
               credentials!.password,
               (foundUser as any).password
             )
-            console.log("is password correct: ", isPasswordCorrect)
+            // console.log("is password correct: ", isPasswordCorrect)
             if (isPasswordCorrect) {
-              return foundUser
+              // @ts-ignore
+              return { name: foundUser.username }
             }
           }
         } catch (error) {
@@ -55,21 +56,18 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
-  // callbacks: {
-  //   async jwt({ token, user }) {
-  //     console.log("jwt user", user)
-  //     console.log("jwt token", token)
-  //     return token
-  //   },
 
-  //   async session({ session, token, user }) {
-  //     //const sessionUser = await User.findOne({ username: session.user.email });
-  //     //  session.user = token.sub
-  //     //session.user.id = sessionUser._id.toString();
-  //     console.log("session session", session)
-  //     console.log("session token", token)
-  //     console.log("session user", user)
-  //     return session
-  //   },
-  // },
+  callbacks: {
+    // @ts-ignore
+    async signIn(user) {
+      return true
+    },
+    async jwt({ token, user }) {
+      return token
+    },
+
+    async session({ session, token }) {
+      return session
+    },
+  },
 }

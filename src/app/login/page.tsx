@@ -53,6 +53,7 @@ const Login = () => {
     if (res?.url == null) {
       console.log("Invalid username or password")
     } else {
+      console.log("Login Successful")
       router.replace("/dashboard")
     }
   }
@@ -64,9 +65,9 @@ const Login = () => {
     <div>
       <div className="flex flex-col items-center">
         <div className="mb-8 space-y-4">
-          <h1 className="text-center text-4xl">Sign in</h1>
+          <h1 className="text-center text-4xl">Login</h1>
           <h3 className="text-center text-base">
-            Sign in and start managing your Tanks
+            Login and start managing your Tanks
             <br /> from <span className="text-accent">anywhere!</span>
           </h3>
         </div>

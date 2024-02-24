@@ -3,7 +3,6 @@ import { Inter, Nunito } from "next/font/google"
 import "./globals.css"
 import Header from "@components/header/header"
 import AuthProvider from "@/components/AuthProvider/authProvider"
-
 const nunito = Nunito({ subsets: ["latin"] })
 
 export const metadata: Metadata = {

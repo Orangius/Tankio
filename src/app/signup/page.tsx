@@ -41,8 +41,9 @@ import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 
-const Login = () => {
+export default function Login() {
   const loginForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,13 +64,24 @@ const Login = () => {
         "content-type": "application/json",
       },
     })
-    if (res.status === 409) setFormSubmitState("Username taken")
-    else if (res.status === 400) setFormSubmitState("Fields incomplete")
-    else setFormSubmitState("Registration sucessful")
+    if (res.status === 409) {
+      setFormSubmitState("Username taken")
+      return
+    } else if (res.status === 400) {
+      setFormSubmitState("Fields incomplete")
+      return
+    } else setFormSubmitState("Registration sucessful")
 
-    router.push("/dashboard")
-    // mutate data
-    // revalidate cache
+    const autoLogin = await signIn("credentials", {
+      redirect: false,
+      username: values.username,
+      password: values.password,
+    })
+
+    if (autoLogin?.url !== null) {
+      console.log("login success")
+      router.replace("/dashboard")
+    }
   }
   function handleShowPassword() {
     setShowPassword(!showPassword)
@@ -182,12 +194,10 @@ const Login = () => {
           Already have an account?{" "}
           <Link href={"/login"}>
             {" "}
-            <span className="underline">Sign in</span>{" "}
+            <span className="underline">Login</span>{" "}
           </Link>
         </h3>
       </div>
     </div>
   )
 }
-
-export default Login

@@ -1,5 +1,6 @@
 import React from "react"
 import Image from "next/image"
+import Link from "next/link"
 export default function Hero() {
   return (
     <main className="px-4 md:px-8 py-1">
@@ -17,8 +18,7 @@ export default function Hero() {
             Water management can’t get easier
           </h2>
           <button className="hidden md:block mt-4 md:mt-12 bg-accent w-full md:w-[221px] h-[72px] rounded-[24px] text-accent-foreground">
-            {" "}
-            Get Started
+            <Link href={"/signup"}>Get Started</Link>
           </button>
         </div>
         <div className="py-4 md:basis-[793px] md:shrink">
@@ -32,8 +32,7 @@ export default function Hero() {
           ></Image>
         </div>
         <button className="md:hidden mt-4 bg-accent w-1/2 md:w-[221px] h-12 rounded-[24px] text-accent-foreground">
-          {" "}
-          Get Started
+          <Link href={"/signup"}>Get Started</Link>
         </button>
       </div>
     </main>
