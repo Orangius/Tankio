@@ -1,8 +1,8 @@
-import { User } from "@/models/user"
-import { NextResponse } from "next/server"
-import { BiBody } from "react-icons/bi"
-import bcryptjs from "bcryptjs"
-import connectToDataBase from "@/lib/db"
+import { User } from "@/models/user";
+import { NextResponse } from "next/server";
+import { BiBody } from "react-icons/bi";
+import bcryptjs from "bcryptjs";
+import connectToDataBase from "@/lib/db";
 export async function GET(request: Request) {
   // const { searchParams } = new URL(request.url)
   // const id = searchParams.get('id')
@@ -15,36 +15,37 @@ export async function GET(request: Request) {
   // const product = await res.json()
 
   // return Response.json({ product })
-  console.log("Visited this api")
+  console.log("Visited this api");
 }
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
+    const body = await request.json();
     //const userData = body.formData
-    console.log(body)
+    console.log(body);
 
     if (!body.username || !body.password) {
       return NextResponse.json(
         { message: "All fields are required" },
         { status: 400 }
-      )
-    }
-    const duplicate = await User.findOne({ username: body.username })
-      .lean()
-      .exec()
-    if (duplicate) {
-      return NextResponse.json({ message: "Username taken" }, { status: 409 })
+      );
     }
 
-    const hashedPassword = await bcryptjs.hash(body.password, 10)
+    const duplicate = await User.findOne({ username: body.username })
+      .lean()
+      .exec();
+    if (duplicate) {
+      return NextResponse.json({ message: "Username taken" }, { status: 409 });
+    }
+
+    const hashedPassword = await bcryptjs.hash(body.password, 10);
     await User.create({
       username: body.username.toLowerCase(),
       password: hashedPassword,
-    })
-    return NextResponse.json({ message: "User created" }, { status: 201 })
+    });
+    return NextResponse.json({ message: "User created" }, { status: 201 });
   } catch (err) {
-    console.log("Error is :", err)
+    console.log("Error is :", err);
   }
 
   //   return new NextResponse("Hello")

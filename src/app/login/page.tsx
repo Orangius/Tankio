@@ -1,8 +1,8 @@
-"use client"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { signIn } from "next-auth/react"
+"use client";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
 import {
   Form,
   FormControl,
@@ -11,10 +11,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
-import { BiSolidHide, BiSolidShow } from "react-icons/bi"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -24,12 +24,12 @@ const formSchema = z.object({
     message: "Password must be at least 6 characters",
   }),
   rememberMe: z.boolean().default(false).optional(),
-})
+});
 
-import React, { useState } from "react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const loginForm = useForm<z.infer<typeof formSchema>>({
@@ -39,37 +39,50 @@ const Login = () => {
       password: "",
       rememberMe: false,
     },
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const router = useRouter()
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const router = useRouter();
+
   async function submitLogin(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    console.log(values);
     const res = await signIn("credentials", {
       redirect: false,
       username: values.username,
       password: values.password,
-    })
-    console.log(res)
+    });
+    console.log(res);
     if (res?.url == null) {
-      console.log("Invalid username or password")
+      setLoginError("Invalid username or password");
+      console.log("Invalid username or password");
     } else {
-      console.log("Login Successful")
-      router.replace("/dashboard")
+      console.log("Login Successful");
+      router.replace("/dashboard");
     }
   }
 
   function handleShowPassword() {
-    setShowPassword(!showPassword)
+    setShowPassword(!showPassword);
+  }
+
+  function clearError() {
+    setLoginError("");
   }
   return (
     <div>
-      <div className="flex flex-col items-center">
-        <div className="mb-8 space-y-4">
+      <div className=" flex flex-col items-center">
+        <div className="relative mb-9 space-y-4">
           <h1 className="text-center text-4xl">Login</h1>
           <h3 className="text-center text-base">
             Login and start managing your Tanks
             <br /> from <span className="text-accent">anywhere!</span>
           </h3>
+          {loginError ? (
+            <h3 className="text-red-500 top-24 left-6 text-center absolute">
+              {loginError}
+            </h3>
+          ) : null}
         </div>
 
         <Form {...loginForm}>
@@ -86,6 +99,7 @@ const Login = () => {
                     <FormLabel>Username</FormLabel>
                     <FormControl>
                       <Input
+                        onFocus={clearError}
                         placeholder="Enter your username"
                         type="text"
                         {...field}
@@ -94,7 +108,7 @@ const Login = () => {
                     </FormControl>
                     <FormMessage />
                   </FormItem>
-                )
+                );
               }}
             />
             <FormField
@@ -107,6 +121,7 @@ const Login = () => {
                     <div className="relative">
                       <FormControl>
                         <Input
+                          onFocus={clearError}
                           placeholder="Enter password"
                           type={showPassword ? "text" : "password"}
                           {...field}
@@ -128,7 +143,7 @@ const Login = () => {
                     </div>
                     <FormMessage className="text-destructive" />
                   </FormItem>
-                )
+                );
               }}
             />
             <FormField
@@ -148,11 +163,14 @@ const Login = () => {
                       <FormLabel>Remember me</FormLabel>
                     </div>
                   </FormItem>
-                )
+                );
               }}
             />
-            <Button className="rounded-full bg-accent text-lg text-accent-foreground">
-              Login
+            <Button
+              className="rounded-full bg-accent text-lg text-accent-foreground"
+              disabled={loginForm.formState.isSubmitting}
+            >
+              {loginForm.formState.isSubmitting ? "Logging in..." : "Login"}
             </Button>
           </form>
         </Form>
@@ -166,7 +184,7 @@ const Login = () => {
         </h3>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

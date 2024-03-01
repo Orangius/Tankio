@@ -1,14 +1,18 @@
-import mongoose, { Schema } from "mongoose"
+import mongoose, { Schema } from "mongoose";
 interface CustomUser {
-  username: string
-  password: string
+  username: string;
+  password: string;
   tankMonitor: {
-    tankMonitorId: string
-    numberOfMonitoredTanks: number
-  }
+    tankMonitorId: string;
+    numberOfMonitoredTanks: number;
+  };
 }
-mongoose.connect(process.env.MONGO_URI!)
-mongoose.Promise = global.Promise
+console.log(process.env.MONGO_URI!);
+mongoose
+  .connect(process.env.MONGO_URI!)
+  .then(() => console.log("Database connected!"))
+  .catch((err) => console.log("A database error occured"));
+mongoose.Promise = global.Promise;
 
 const userSchema = new Schema<CustomUser>(
   {
@@ -25,11 +29,9 @@ const userSchema = new Schema<CustomUser>(
     tankMonitor: {
       tankMonitorId: {
         type: String,
-        required: true,
       },
       numberOfMonitoredTanks: {
         type: Number,
-        required: true,
       },
     },
   },
@@ -37,6 +39,6 @@ const userSchema = new Schema<CustomUser>(
   {
     timestamps: true,
   }
-)
+);
 export const User =
-  mongoose.models.User || mongoose.model<CustomUser>("User", userSchema)
+  mongoose.models.User || mongoose.model<CustomUser>("User", userSchema);

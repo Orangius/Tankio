@@ -1,8 +1,8 @@
-"use client"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { BiSolidHide, BiSolidShow } from "react-icons/bi" // <BiSolidHide />  <BiSolidShow />
+"use client";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { BiSolidHide, BiSolidShow } from "react-icons/bi"; // <BiSolidHide />  <BiSolidShow />
 
 import {
   Form,
@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z
   .object({
@@ -29,19 +29,19 @@ const formSchema = z
   })
   .refine(
     (data) => {
-      return data.password === data.confirmPassword
+      return data.password === data.confirmPassword;
     },
     {
       message: "Passwords do not match",
       path: ["confirmPassword"],
     }
-  )
+  );
 
-import React, { useState } from "react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { signIn } from "next-auth/react"
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   const loginForm = useForm<z.infer<typeof formSchema>>({
@@ -51,11 +51,11 @@ export default function Login() {
       password: "",
       confirmPassword: "",
     },
-  })
+  });
 
-  const [showPassword, setShowPassword] = useState(false)
-  const [formSubmitState, setFormSubmitState] = useState("")
-  const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false);
+  const [formSubmitState, setFormSubmitState] = useState("");
+  const router = useRouter();
   async function submitLogin(values: z.infer<typeof formSchema>) {
     const res = await fetch("/api/users", {
       method: "POST",
@@ -63,28 +63,28 @@ export default function Login() {
       headers: {
         "content-type": "application/json",
       },
-    })
+    });
     if (res.status === 409) {
-      setFormSubmitState("Username taken")
-      return
+      setFormSubmitState("Username taken");
+      return;
     } else if (res.status === 400) {
-      setFormSubmitState("Fields incomplete")
-      return
-    } else setFormSubmitState("Registration sucessful")
+      setFormSubmitState("Fields incomplete");
+      return;
+    } else setFormSubmitState("Registration sucessful");
 
     const autoLogin = await signIn("credentials", {
       redirect: false,
       username: values.username,
       password: values.password,
-    })
+    });
 
     if (autoLogin?.url !== null) {
-      console.log("login success")
-      router.replace("/dashboard")
+      console.log("login success");
+      router.replace("/dashboard");
     }
   }
   function handleShowPassword() {
-    setShowPassword(!showPassword)
+    setShowPassword(!showPassword);
   }
   return (
     <div>
@@ -125,7 +125,7 @@ export default function Login() {
 
                     <FormMessage />
                   </FormItem>
-                )
+                );
               }}
             />
             <FormField
@@ -159,7 +159,7 @@ export default function Login() {
                     </div>
                     <FormMessage className="text-destructive" />
                   </FormItem>
-                )
+                );
               }}
             />
 
@@ -180,12 +180,15 @@ export default function Login() {
                     </FormControl>
                     <FormMessage className="text-destructive" />
                   </FormItem>
-                )
+                );
               }}
             />
 
-            <Button className="rounded-full bg-accent text-lg text-accent-foreground">
-              Sign up
+            <Button
+              className="rounded-full bg-accent text-lg text-accent-foreground"
+              disabled={loginForm.formState.isSubmitting}
+            >
+              {loginForm.formState.isSubmitting ? "Please wait..." : "Login"}
             </Button>
           </form>
         </Form>
@@ -199,5 +202,5 @@ export default function Login() {
         </h3>
       </div>
     </div>
-  )
+  );
 }

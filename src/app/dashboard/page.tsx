@@ -1,72 +1,72 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react"
-import TankImage from "@/components/TankImage/TankImage"
-import clsx from "clsx"
-import { useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
-import { fetchUserDevice } from "@/lib/serverActions"
+import React, { useEffect, useState } from "react";
+
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { fetchUserDevice } from "@/lib/serverActions";
+import TankAndControls from "@/components/TankAndControls/TankAndControls";
+import { Button } from "@/components/ui/button";
+import { FaPlus } from "react-icons/fa";
+
+export interface TankDataType {
+  username: string;
+  tankMonitor: {
+    tankMonitorId: string;
+    numberOfMonitoredTanks: string;
+  };
+  setTank: () => void;
+}
+
+import DialogBox from "@/components/dialog/dialog";
 
 const page = () => {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect("/login")
+      redirect("/login");
     },
-  })
-  console.log("session user: ", session?.user?.name)
-  const [userData, setUserData] = useState<any>({})
+  });
+
+  const [userTankData, setUserTankData] = useState<TankDataType>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [tankAdded, setTankAdded] = useState<boolean>(false);
+
+  function addTank() {
+    setTankAdded(true);
+  }
+
   useEffect(() => {
     async function fetchTankInfo() {
-      const TankData = await fetchUserDevice(session?.user?.name)
-      console.log(TankData)
-      setUserData(TankData)
+      // setIsLoading(true);
+
+      await fetchUserDevice(session?.user?.name).then((res) => {
+        setUserTankData(res);
+        setIsLoading(false);
+      });
     }
-    fetchTankInfo()
-    // console.log("TankData: ", userTankData)
-  }, [session])
-  // if (!userData.tankMonitor) {
-  //   console.log("No tanks yet")
-  // }
-  return <div>{userData ? <h1> {userData.username}</h1> : null}</div>
-}
+    if (status === "authenticated") {
+      fetchTankInfo();
+    }
+  }, [session?.user?.name, tankAdded]);
 
-export default page
+  return (
+    <div className=" mx-4 h-[80vh] flex flex-col justify-center items-center">
+      {!isLoading ? (
+        <>
+          {userTankData?.tankMonitor ? (
+            <TankAndControls userTankData={userTankData} />
+          ) : !tankAdded ? (
+            <DialogBox setTank={addTank} userTankData={userTankData} />
+          ) : null}{" "}
+        </>
+      ) : (
+        <>
+          <h1>Loading...</h1>
+        </>
+      )}
+    </div>
+  );
+};
 
-// export default function page() {
-//   const [pumpOnImage, setPumpOnImage] = useState(false)
-//   const { data: session, status } = useSession({
-//     required: true,
-//     onUnauthenticated() {
-//       redirect("/login")
-//     },
-//   })
-//   function swap() {
-//     setPumpOnImage(!pumpOnImage)
-//   }
-
-//   return (
-//     <div className="mx-4">
-//       <h1>Welcome {session?.user?.name}</h1>
-//       <div className=" bg-secondary border border-primary rounded-[24px] ">
-//         <div className="flex justify-between items-center mt-2 mx-2">
-//           <button
-//             className="h-8 ml-2 mt-2 rounded-[15px] font-bold text-xl w-20 bg-primary text-primary-foreground"
-//             onClick={swap}
-//           >
-//             {pumpOnImage ? "Off" : "On"}
-//           </button>
-//           <h3 className="font-bold text-xl">50%</h3>
-//         </div>
-//         <div className={clsx({ hidden: pumpOnImage })}>
-//           {" "}
-//           <TankImage level={50} animated={false} />
-//         </div>
-//         <div className={clsx({ hidden: !pumpOnImage })}>
-//           {" "}
-//           <TankImage level={50} animated={true} />
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
+export default page;
