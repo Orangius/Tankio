@@ -40,6 +40,7 @@ export default function App() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState]
 
+
   return (
     <>
       <div>Hello WebSockets!</div>
@@ -58,3 +59,5 @@ export default function App() {
     </>
   )
 }
+
+

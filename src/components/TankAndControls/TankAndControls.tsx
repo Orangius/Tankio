@@ -1,7 +1,11 @@
 import TankImage from "@/components/TankImage/TankImage";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { TankDataType } from "@/app/dashboard/page";
+
+import useWebSocket, { ReadyState } from "react-use-websocket";
+const WS_URL = "ws://localhost:3000/api/devices";
+const USERNAME = "dashboard_secret";
 
 const TankAndControls = ({
   userTankData,
@@ -12,11 +16,59 @@ const TankAndControls = ({
   function swap() {
     setPumpOnImage(!pumpOnImage);
   }
+
+  const [deviceIsOnline, setDeviceisOnline] = useState(false);
+
+  const {
+    sendMessage,
+    sendJsonMessage,
+    lastMessage,
+    lastJsonMessage,
+    readyState,
+    getWebSocket,
+  } = useWebSocket(WS_URL, {
+    onOpen: () => {
+      console.log("WebSocket connection established.");
+    },
+    queryParams: { id: USERNAME },
+    share: true,
+    shouldReconnect: (closeEvent) => true,
+    reconnectAttempts: 10,
+    //attemptNumber will be 0 the first time it attempts to reconnect, so this equation results in a reconnect pattern of 1 second, 2 seconds, 4 seconds, 8 seconds, and then caps at 10 seconds until the maximum number of attempts is reached
+    reconnectInterval: 3000,
+    onMessage: (message) => {
+      if (message.data == "offline") {
+        setDeviceisOnline(false);
+      } else {
+        setDeviceisOnline(true);
+      }
+
+      console.log("Message Received: ", message.data);
+    },
+  });
+
+  console.log("Message is: ", deviceIsOnline);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
+  useEffect(() => {
+    console.log("effect ran");
+    sendMessage("PING:");
+  }, []);
+
+  const handleClickSendMessage = useCallback(() => sendMessage("Hello"), []);
+
   return (
-    <div className="w-full  md:w-1/3">
+    <div className="w-full mt-40  md:w-1/3">
       <div className="mb-4">
         {userTankData?.username ? (
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-2xl text-center font-bold">
             Welcome,{" "}
             {userTankData.username?.charAt(0).toUpperCase() +
               userTankData.username?.slice(1)}

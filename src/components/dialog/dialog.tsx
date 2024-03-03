@@ -81,7 +81,7 @@ const DialogBox = ({
   }
 
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center">
       <h3 className="text-center mb-4 md:text-2xl">
         Add your tank monitor device to get started
       </h3>
