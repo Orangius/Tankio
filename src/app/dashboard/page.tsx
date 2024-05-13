@@ -20,7 +20,7 @@ export interface TankDataType {
 
 import DialogBox from "@/components/dialog/dialog";
 
-const page = () => {
+const DashboardPage = () => {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
@@ -69,4 +69,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default DashboardPage;

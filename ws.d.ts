@@ -1,8 +1,9 @@
-import { Websocket } from "ws"
+import { Websocket } from "ws";
 
 declare module "ws" {
   interface WebSocket {
-    isAlive: boolean
-    identification: string | null
+    isAlive: boolean;
+    id: string | null;
+    type: string | null;
   }
 }

@@ -5,6 +5,7 @@ interface CustomUser {
   tankMonitor: {
     tankMonitorId: string;
     numberOfMonitoredTanks: number;
+    tankLastLevel: number;
   };
 }
 console.log(process.env.MONGO_URI!);
@@ -31,6 +32,9 @@ const userSchema = new Schema<CustomUser>(
         type: String,
       },
       numberOfMonitoredTanks: {
+        type: Number,
+      },
+      tankLastLevel: {
         type: Number,
       },
     },

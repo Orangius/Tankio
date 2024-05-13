@@ -176,7 +176,7 @@ const Login = () => {
         </Form>
 
         <h3 className="mt-8">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href={"/signup"}>
             {" "}
             <span className="underline">Sign Up</span>{" "}
