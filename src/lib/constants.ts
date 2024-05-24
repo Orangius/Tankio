@@ -1,1 +1,1 @@
-export const WS_URL = "ws://16.171.3.59:5000/"
+export const WS_URL = "ws://16.171.3.59"
