@@ -52,7 +52,7 @@ const Login = () => {
       username: values.username,
       password: values.password,
     });
-    console.log(res);
+    console.log("res is: ",res);
     if (res?.url == null) {
       setLoginError("Invalid username or password");
       console.log("Invalid username or password");
