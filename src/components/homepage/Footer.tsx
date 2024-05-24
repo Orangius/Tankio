@@ -1,9 +1,9 @@
-import Link from "next/link"
-import React from "react"
-import { FaFacebook } from "react-icons/fa"
-import { FaLinkedin } from "react-icons/fa"
-import { FaInstagram } from "react-icons/fa"
-import { MdCopyright } from "react-icons/md"
+import Link from "next/link";
+import React from "react";
+import { FaFacebook } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { MdCopyright } from "react-icons/md";
 export default function Footer() {
   return (
     <div className=" flex flex-col justify-center item-center bg-secondary min-h-[100px] mx-4 mt-10 rounded-tl-[24px] rounded-tr-[24px] text-center p-4 text-sm md:text-lg">
@@ -18,7 +18,7 @@ export default function Footer() {
         <Link href={"#"}>
           <FaFacebook />
         </Link>
-        <Link href={"#"}>
+        <Link href={"https://www.linkedin.com/in/nwaniremi"}>
           <FaLinkedin />
         </Link>
         <Link href={"#"}>
@@ -26,5 +26,5 @@ export default function Footer() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

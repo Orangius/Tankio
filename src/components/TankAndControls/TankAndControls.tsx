@@ -5,7 +5,7 @@ import { TankDataType } from "@/app/dashboard/page";
 import { useSession } from "next-auth/react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { fetchTankLevel } from "@/lib/serverActions";
-const WS_URL = "ws://localhost:3000/api/devices";
+const WS_URL = process.env.WS_URL
 const type = "dashboard";
 
 interface messageType {
@@ -68,7 +68,7 @@ const TankAndControls = ({
     lastJsonMessage,
     readyState,
     getWebSocket,
-  } = useWebSocket(WS_URL, {
+  } = useWebSocket(WS_URL as string, {
     onOpen: () => {
       console.log("WebSocket connection established.");
     },
@@ -103,13 +103,13 @@ const TankAndControls = ({
 
   console.log("Is hardware online?: ", deviceIsOnline);
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   useEffect(() => {
     console.log("checked if hardware is present effect ran");

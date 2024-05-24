@@ -11,7 +11,7 @@ const DemoPage = () => {
   const [pumpOnImage, setPumpOnImage] = useState(false);
   const { data: session, status } = useSession();
   function swap() {
-    setPumpOnImage(!pumpOnImage);
+    setPumpOnImage((currentValue)=>!currentValue);
   }
 
   useEffect(() => {
@@ -33,8 +33,8 @@ const DemoPage = () => {
   // console.log("Session is", session?.user?.name);
 
   return (
-    <div className="flex justify-center mt-10 mx-8">
-      <div>
+    <div className="mx-8 md:mx-0 flex flex-col justify-center items-center">
+      <div className="w-full md:w-1/3">
         <div className="mb-4">
           {session?.user?.name ? (
             <h1 className="text-2xl text-center font-bold">
@@ -46,8 +46,8 @@ const DemoPage = () => {
             <h1 className="text-2xl text-center font-bold">Welcome, Guest</h1>
           )}
           <p className="text-center">
-            Pump water into your tank by clicking the "On" button, turn it off
-            by clicking the same button. Its as simple as that!
+            Pump water into your tank by clicking the &quot;On&quot; button,
+            turn it off by clicking the same button. Its as simple as that!
           </p>
         </div>
         <div className=" bg-secondary border border-primary rounded-[24px]">

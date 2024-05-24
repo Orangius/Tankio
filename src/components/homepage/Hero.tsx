@@ -1,6 +1,6 @@
-import React from "react"
-import Image from "next/image"
-import Link from "next/link"
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 export default function Hero() {
   return (
     <main className="px-4 md:px-8 py-1">
@@ -13,11 +13,10 @@ export default function Hero() {
             Again
           </h1>
           <h2 className="text-xl">
-            Manually or automatically manage water in your <br />
-            home from anywhere, anytime, anyday. <br />
-            Water management can’t get easier
+            Monitor and manage water in your <br />
+            home from anywhere, anytime, anyday! <br />
           </h2>
-          <button className="hidden md:block mt-4 md:mt-12 bg-accent w-full md:w-[221px] h-[72px] rounded-[24px] text-accent-foreground">
+          <button className="hidden md:block mt-4 md:mt-12 bg-accent w-full md:w-[221px] h-[72px] rounded-full text-accent-foreground">
             <Link href={"/signup"}>Get Started</Link>
           </button>
         </div>
@@ -36,5 +35,5 @@ export default function Hero() {
         </button>
       </div>
     </main>
-  )
+  );
 }

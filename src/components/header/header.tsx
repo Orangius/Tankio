@@ -1,34 +1,34 @@
-"use client"
-import Image from "next/image"
-import React, { useEffect, useRef, useState } from "react"
-import { IoMenu } from "react-icons/io5"
-import { IoMdClose } from "react-icons/io"
-import { Separator } from "@/components/ui/separator"
-import { clsx } from "clsx"
-import Link from "next/link"
-import { useSession } from "next-auth/react"
+"use client";
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
+import { IoMenu } from "react-icons/io5";
+import { IoMdClose } from "react-icons/io";
+import { Separator } from "@/components/ui/separator";
+import { clsx } from "clsx";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 function Header() {
-  const [openMenu, setOpenMenu] = useState(false)
-  const { data: session, status } = useSession()
-  const menuRef = useRef() as React.RefObject<HTMLElement> //React.LegacyRef<HTMLElement> //React.MutableRefObject<HTMLInputElement>;
+  const [openMenu, setOpenMenu] = useState(false);
+  const { data: session, status } = useSession();
+  const menuRef = useRef() as React.RefObject<HTMLElement>; //React.LegacyRef<HTMLElement> //React.MutableRefObject<HTMLInputElement>;
 
   function openMobileMenu() {
-    setOpenMenu(!openMenu)
+    setOpenMenu(!openMenu);
   }
 
   useEffect(() => {
     const handleMenuAutoClose = (e: any) => {
       if (!menuRef?.current?.contains(e.target)) {
-        setOpenMenu(false)
+        setOpenMenu(false);
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleMenuAutoClose)
+    document.addEventListener("mousedown", handleMenuAutoClose);
     return () => {
-      document.removeEventListener("mousedown", handleMenuAutoClose)
-    }
-  })
+      document.removeEventListener("mousedown", handleMenuAutoClose);
+    };
+  });
   return (
     <>
       <header
@@ -80,7 +80,7 @@ function Header() {
               </Link>
             </li>
             <Separator className="w-3/12 md:hidden" />
-            <li>
+            {/* <li>
               <Link
                 className="cursor-pointer"
                 href="/blog"
@@ -88,7 +88,7 @@ function Header() {
               >
                 Blog
               </Link>
-            </li>
+            </li> */}
             <Separator className="w-3/12 md:hidden" />
             <li>
               {status === "authenticated" ? (
@@ -121,7 +121,7 @@ function Header() {
                   href="/signup"
                   onClick={openMobileMenu}
                 >
-                  SIgn up
+                  Sign up
                 </Link>
               </li>
             ) : null}
@@ -141,7 +141,7 @@ function Header() {
       </header>
       <Separator className="w-full hidden  md:inline-block mb-4" />
     </>
-  )
+  );
 }
 
-export default Header
+export default Header;

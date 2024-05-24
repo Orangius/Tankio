@@ -48,7 +48,7 @@ const DashboardPage = () => {
     if (status === "authenticated") {
       fetchTankInfo();
     }
-  }, [session?.user?.name, tankAdded]);
+  }, [session?.user?.name, tankAdded, status]);
 
   return (
     <div className=" mx-4 h-[80vh] flex flex-col justify-center items-center">
