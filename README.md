@@ -14,13 +14,13 @@ These functions can be set to automatic though, for example the pumping can be t
 *	Enter the ID of the tank monitor hardware associated with the tank you want to control
 *	The tank is all yours to control and monitor from anywhere in the world
 Note: For now there is no way 
-Tech used (and why): 
-Websocket: Websocket was used so as to provide a persistent messaging channel between the server, the client (the dashboard on a browser) and the hardware. Other messaging technologies such as MQTT (Message Queuing Telemetry Transport) can be used for its low memory footprint on embedded devices, however I needed a real time bidirectional communication between the server and the clients, hence the choice for websocket over MQTT.
+## Tech used (and why)
+* **Websocket**: Websocket was used so as to provide a persistent messaging channel between the server, the client (the dashboard on a browser) and the hardware. Other messaging technologies such as MQTT (Message Queuing Telemetry Transport) can be used for its low memory footprint on embedded devices, however I needed a real time bidirectional communication between the server and the clients, hence the choice for websocket over MQTT.
 
-Nextjs: Nextjs 14 was used for this project, Next was used because of its simple file-based routing structure, server-side rendering of pages (for SEO), and its file based routing, image optimization and so much more. 
-Express JS: The backend is built using the express JS framework, it is very popular un-opinionated framework with shallow learning curve, servers can be spin up in less than a minute using express.
+* **Nextjs:** Nextjs 14 was used for this project, Next was used because of its simple file-based routing structure, server-side rendering of pages (for SEO), and its file based routing, image optimization and so much more. 
+* **Express JS:** The backend is built using the express JS framework, it is very popular un-opinionated framework with shallow learning curve, servers can be spin up in less than a minute using express.
 
-Mongo DB: Mongo DB is used to store the users data, like their usernames and password, and to log the water level in the tank. Using a NoSQL database like Mongo DB is a matter of choice, SQL database like MySQL, Postgres or even SQL lite could have handled the project just fine.
+* **Mongo DB:** Mongo DB is used to store the users data, like their usernames and password, and to log the water level in the tank. Using a NoSQL database like Mongo DB is a matter of choice, SQL database like MySQL, Postgres or even SQL lite could have handled the project just fine.
 
 Challenges: On the frontend, when the user clicks the on button, an animated gif appears on the screen showing that the pump is currently pumping, to avoid loading another entire image, only a part of the image is swapped out, particularly the water level in the tank. Also as the tank gets filled up, it reflects on the dashboard too. Getting these two functionalities was tricky and challenging, and I plan to make a “behind the scene” post on how the functionality was achieved.
 On the backend, among all other challenges, updating the dashboard in real time when the associated hardware comes online or goes offline was a bit challenging. For this, the server  has to continuously ping every connected hardware every 5 seconds (5 seconds was chosen because I want the server to know that a hardware to go offline not more than 5 seconds after the device went offline), and updating the dashboard of the user accordingly.
