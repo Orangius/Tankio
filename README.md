@@ -22,7 +22,9 @@ Note: For now there is no way
 
 * **Mongo DB:** Mongo DB is used to store the users data, like their usernames and password, and to log the water level in the tank. Using a NoSQL database like Mongo DB is a matter of choice, SQL database like MySQL, Postgres or even SQL lite could have handled the project just fine.
 
-Challenges: On the frontend, when the user clicks the on button, an animated gif appears on the screen showing that the pump is currently pumping, to avoid loading another entire image, only a part of the image is swapped out, particularly the water level in the tank. Also as the tank gets filled up, it reflects on the dashboard too. Getting these two functionalities was tricky and challenging, and I plan to make a “behind the scene” post on how the functionality was achieved.
+## Challenges
+On the frontend, when the user clicks the on button, an animated gif appears on the screen showing that the pump is currently pumping, to avoid loading another entire image, only a part of the image is swapped out, particularly the water level in the tank. Also as the tank gets filled up, it reflects on the dashboard too. Getting these two functionalities was tricky and challenging, and I plan to make a “behind the scene” post on how the functionality was achieved.  
+
 On the backend, among all other challenges, updating the dashboard in real time when the associated hardware comes online or goes offline was a bit challenging. For this, the server  has to continuously ping every connected hardware every 5 seconds (5 seconds was chosen because I want the server to know that a hardware to go offline not more than 5 seconds after the device went offline), and updating the dashboard of the user accordingly.
 Again, the project, since it makes use of websockets cannot be hosted in a serverless environment like Vercel or Netlify, so an EC2 intance was configured to host the front and backend
 
