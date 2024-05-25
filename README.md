@@ -12,7 +12,7 @@ These functions can be set to automatic though, for example the pumping can be t
 *	Navigate to the dashboard
 *	Enter the ID of the tank monitor hardware associated with the tank you want to control
 *	The tank is all yours to control and monitor from anywhere in the world
-Note: For now there is no way 
+#### *Note: If you do not have the hardware, you can navigate to the [demo](http://16.171.3.59/demo) page to see how it works*
 ## Tech used (and why)
 * **Websocket**: Websocket was used so as to provide a persistent messaging channel between the server, the client (the dashboard on a browser) and the hardware. Other messaging technologies such as MQTT (Message Queuing Telemetry Transport) can be used for its low memory footprint on embedded devices, however I needed a real time bidirectional communication between the server and the clients, hence the choice for websocket over MQTT.
 
