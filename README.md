@@ -1,5 +1,4 @@
-## Title
-### Tankio
+## Title: Tankio
 ## Role
 Frontend, Backend, Embedded device programming
 ## Description
