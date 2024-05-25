@@ -8,7 +8,7 @@ This is Tankio, Tankio helps users especially those in areas where the power sup
 Now Tankio allows users to see the remaining water level, turn on the pump to pump water into the tank and stop the water when the tank is full.
 These functions can be set to automatic though, for example the pumping can be triggered automatically when the water reaches a predefined level set by the user. This functionality is currently being implemented
 ## Usage: 
-* visit *website* and Sign Up 
+* visit [Tankio](http://16.171.3.59/) and Sign Up 
 *	Navigate to the dashboard
 *	Enter the ID of the tank monitor hardware associated with the tank you want to control
 *	The tank is all yours to control and monitor from anywhere in the world
