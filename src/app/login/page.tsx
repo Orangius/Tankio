@@ -71,7 +71,7 @@ const Login = () => {
   }
   return (
     <div>
-      <div className=" flex flex-col items-center">
+      <div className=" flex flex-col items-center justify-center">
         <div className="relative mb-9 space-y-4">
           <h1 className="text-center text-4xl">Login</h1>
           <h3 className="text-center text-base">

@@ -7,27 +7,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { fetchTankLevel } from "@/lib/serverActions";
 
 import { WS_URL } from "@/lib/constants";
-const type = "dashboard";
-
-interface messageType {
-  type: string;
-  message: string;
-  sender: string;
-  receiverID: string;
-}
-
-function checkHardwareStatus(message: MessageEvent<any>) {
-  const jsonMessage = JSON.parse(message.data);
-  if (jsonMessage.type !== "checkIfOnline") {
-    return null;
-  } else {
-    if (jsonMessage.message === "online") {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
+const type = "DASHBOARD";
 
 const TankAndControls = ({
   userTankData,
@@ -47,14 +27,20 @@ const TankAndControls = ({
   }
 
   function swap() {
-    setPumpOnImage((currentValue)=>!currentValue);
-    const toSend = {
-      type: "comm",
-      message: !pumpOnImage,
-      sender: "dashboard",
-      receiverID: "MTANK",
+    setPumpOnImage((currentValue) => !currentValue);
+
+    const toggleState = {
+      headers: {
+        type: "message",
+        senderId: String(userTankData?.tankMonitor.tankMonitorId),
+        receiverType: "HARDWARE",
+      },
+      body: {
+        type: "togglestate",
+        value: !pumpOnImage,
+      },
     };
-    sendMessage(JSON.stringify(toSend));
+    sendMessage(JSON.stringify(toggleState));
   }
 
   const [deviceIsOnline, setDeviceisOnline] = useState(false);
@@ -67,8 +53,7 @@ const TankAndControls = ({
     readyState,
     getWebSocket,
   } = useWebSocket(WS_URL, {
-    onOpen: () => {
-    },
+    onOpen: () => {},
     queryParams: {
       id: String(userTankData?.tankMonitor.tankMonitorId),
       type: type,
@@ -79,25 +64,38 @@ const TankAndControls = ({
     //attemptNumber will be 0 the first time it attempts to reconnect, so this equation results in a reconnect pattern of 1 second, 2 seconds, 4 seconds, 8 seconds, and then caps at 10 seconds until the maximum number of attempts is reached
     reconnectInterval: 3000,
     onMessage: (message) => {
-   
-      const jsonMessage = JSON.parse(message.data);
-     
-      if (jsonMessage.type === "checkIfOnline") {
-        const onlineOrOffline = checkHardwareStatus(message);
-        if (onlineOrOffline) {
-          setDeviceisOnline(true);
-          fetchTankInfo();
-        } else {
-          setDeviceisOnline(false);
-          setPumpOnImage(false);
+      try {
+        const jsonMessage: WsRequest | WsResponse = JSON.parse(message.data);
+        console.log(jsonMessage);
+        switch (jsonMessage.headers.type) {
+          case "update":
+            if (jsonMessage.headers.online) {
+              setDeviceisOnline(true);
+              fetchTankInfo();
+            } else {
+              setDeviceisOnline(false);
+              setPumpOnImage(false);
+            }
+
+            break;
+          case "message":
+            if ("body" in jsonMessage && jsonMessage.body) {
+              switch (jsonMessage.body.type) {
+                case "updatetanklevel":
+                  setWaterLevel(Number(jsonMessage.body.value));
+                  break;
+
+                case "togglestate":
+                  break;
+              }
+            }
+            break;
         }
-      } else if (jsonMessage.type === "updateTankLevel") {
-     
-        setWaterLevel(Number(jsonMessage.message));
+      } catch (error) {
+        console.log(error);
       }
     },
   });
-
 
   // const connectionStatus = {
   //   [ReadyState.CONNECTING]: "Connecting",
@@ -109,14 +107,14 @@ const TankAndControls = ({
 
   useEffect(() => {
     const CheckStatus = {
-      type: "checkIfOnline",
-      message: "I am here",
-      sender: "dashboard",
-      receiverID: String(userTankData?.tankMonitor.tankMonitorId),
+      headers: {
+        type: "checkstatus",
+        senderId: "MTANK",
+        receiverType: "HARDWARE",
+      },
     };
     sendMessage(JSON.stringify(CheckStatus));
   }, [userTankData?.tankMonitor.tankMonitorId, sendMessage]);
-
 
   return (
     <div className="w-full mt-40  md:w-1/3">
