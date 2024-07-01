@@ -16,12 +16,12 @@ These functions can be set to automatic though, for example the pumping can be t
 
 ## Usage:
 
-- visit [Tankio](https.tankio.orangius.xyz/) and Sign Up
+- visit [Tankio](https://tankio.orangius.xyz) and Sign Up
 - Navigate to the dashboard
 - Enter the ID of the tank monitor hardware associated with the tank you want to control
 - The tank is all yours to control and monitor from anywhere in the world
 
-#### _Note: If you do not have the hardware, you can navigate to the [demo](https.tankio.orangius.xyz/demo) page to see how it works_
+#### _Note: If you do not have the hardware, you can navigate to the [demo](https://tankio.orangius.xyz/demo) page to see how it works_
 
 ## Tech used (and why)
 
